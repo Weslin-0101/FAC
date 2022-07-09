@@ -1,0 +1,14 @@
+# programa para printar hello world
+        .data
+
+msg:    .asciiz "Ola Mundo\n"
+    
+        .text
+        
+main: 
+        li $v0, 4 # chamar o endereço
+        la $a0, msg # carrega o enderço da mensagem
+        syscall # printa a função
+
+        li $v0, 10 # encerrar o programa
+        syscall # printa a função
