@@ -1,0 +1,22 @@
+#   Programa para ler dois números
+        .data
+
+msg:    .asciiz "Ola Mundo\n"
+    
+        .text
+        
+main:
+        li $v0, 5 #carrego uma constante para o registrador $v0
+        syscall 
+        move $t0, $v0; # aqui faço a seguinte operação t0 = v0
+
+        li $v0, 5 #carrego uma constante para o registrador $v0
+        syscall
+        move $t1, $v0; # aqui faço a seguinte operação t1 = v0
+
+        add $t0, $t0, $t1; # aqui faço a seguinte operação t0 = t0 + t1
+
+        li $v0, 1 #carrego uma constante para o registrador $v0
+        move $a0, $t0; # aqui faço a seguinte operação $a0 = t0
+        syscall # chamo o sistema para imprimir na tela
+
