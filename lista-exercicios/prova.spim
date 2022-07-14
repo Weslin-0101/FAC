@@ -40,7 +40,7 @@ caso3:
         addi $t1, $zero, 60     # $t1 = 60
         bgt $t0, $t1, caso4     # $t0 > $t1, vá para o case 4
         li $v0, 4,
-        la $a0, deuC    # endereço de deuC
+        la $a0, deuC            # endereço de deuC
         syscall
         j end
 
