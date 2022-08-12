@@ -1,0 +1,34 @@
+    .data
+
+c:  .double 100.00          # constante double 100.00
+    
+    .text
+
+main:
+    li      $v0, 7               # ler um double e retornar no $f0
+    syscall
+    mov.d   $f2, $f0             # copiar o valor do $f0 para $f2
+
+    li      $v0, 7               # ler um double e retorna no $f0
+    syscall
+    mov.d   $f4, $f0             # copiar o valor do $f0 para $f4
+
+    li      $v0, 7               # ler um double e retorna no $f0
+    syscall
+    mov.d   $f6, $f0             # copiar o valor do $f0 para $f6
+    l.d     $f10, c              # carrega a constante no $f10
+
+    div.d   $f4, $f4, $f10       # divide $f4 por $f10 e coloca o resultado no $f4
+    mul.d   $f8, $f2, $f4        # multiplica $f2 por $f4 e coloca o resultado no $f8
+    add.d   $f0, $f2, $f8        # soma $f2 e $f8 e coloca o resultado no $f0
+
+    div.d   $f6, $f6, $f10       # divide $f6 por $f10 e coloca o resultado no $f6
+    mul.d   $f8, $f2, $f6        # multiplica $f2 por $f6 e coloca o resultado no $f8
+    add.d   $f0, $f0, $f8        # soma $f0 e $f8 e coloca o resultado no $f0
+
+    li      $v0, 3               # printar um double e o valor vai ser retornado no $f12
+    mov.d   $f12, $f0            # copiar o valor do $f0 para $f12
+    syscall
+
+    li      $v0, 10              # finalizar o programa
+    syscall

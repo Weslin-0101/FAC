@@ -1,0 +1,103 @@
+    .data
+
+celsius:    .byte 'C'
+fahrenheit: .byte 'F'
+kelvin:     .byte 'K'
+constFC:    .float 5.0, 9.0, 32.0
+constCK:    .float 273.15
+
+    .text
+
+main:
+    li  $v0, 12             # ler um caracter
+    syscall
+    move $t0, $v0           # guarda o caracter lido em $t0
+
+    li  $v0, 12             # ler um caracter
+    syscall
+    move $t1, $v0           # guarda o caracter lido em $t1
+
+    li  $v0, 6              # ler um float
+    syscall
+
+    lb  $s0, celsius        # carrega o caracter celsius em $s0
+    beq $t0, $s0, goToC     # se $t0 for igual a $s0, então vai para o celsius
+
+    lb  $s0, fahrenheit     # carrega o caracter fahrenheit em $s0
+    beq $t0, $s0, goToF     # se $t0 for igual a $s0, então vai para o fahrenheit
+
+tempKelvin:
+    lb  $s0, celsius        # carrega o caracter celsius em $s0
+    beq $t1, $s0, convertKtoC     # se $t1 for igual a $s0, então vai para o celsius
+
+convert
+
+convertKtoC:
+    lwc1 $f2, constCK
+    sub.s   $f0, $f0, $f2
+
+    j   end
+
+goToF:
+    lb  $s0, celsius       # carrega o caracter celsius em $s0
+    beq $t1, $s0, convertFtoC # se $t1 for igual a $s0, então vai para o convertFtoC
+
+convertFtoK:
+    la  $t3, constFC
+    lwc1    $f2, 0($t3)    # carrega o valor de 5.0 em $f2
+    lwc1    $f3, 4($t3)    # carrega o valor de 9.0 em $f3
+    lwc1    $f4, 8($t3)    # carrega o valor de 32.0 em $f4
+
+    div.s   $f1, $f2, $f3   # divide $f2 por $f3 e guarda o resultado em $f1
+    sub.s   $f0, $f0, $f4   # subtrai $f0 por $f4 e guarda o resultado em $f0
+    mul.s   $f0, $f0, $f1   # multiplica $f0 por $f1 e guarda o resultado em $f0
+
+    lwc1    $f2, constCK    # carrega o valor de 273.15 em $f2
+
+    add.s   $f0, $f0, $f2   # soma $f0 por $f2 e guarda o resultado em $f0
+
+    j end
+
+convertFtoC:
+    la      $t3, constFC
+    lwc1    $f2, 0($t3)    # carrega o valor de 5.0 em $f2
+    lwc1    $f3, 4($t3)    # carrega o valor de 9.0 em $f3
+    lwc1    $f4, 8($t3)    # carrega o valor de 32.0 em $f4
+
+    div.s   $f1, $f2, $f3   # divide $f2 por $f3 e guarda o resultado em $f1
+    sub.s   $f0, $f0, $f4   # subtrai $f0 por $f4 e guarda o resultado em $f0
+    mul.s   $f0, $f0, $f1   # multiplica $f0 por $f1 e guarda o resultado em $f0
+
+    j end
+
+goToC:
+    lb  $s0, fahrenheit     # carrega o caracter fahrenheit em $s0
+    beq $t1, $s0, convertCToF # se $t1 for igual a $s0, então vai para o convertCToF
+
+convertCtoK:
+    lwc1    $f2, constCK    # carrega o valor de 273.15 em $f2
+
+    add.s   $f0, $f0, $f2   # $f0 = $f0 + $f2
+
+    j end
+
+convertCToF:
+    la      $t3, constFC       # carrega o valor de constFC em $f2
+    lwc1    $f2, 0($t3)        # carrega o primeiro valor(5.0) de constFC em $f2
+    lwc1    $f3, 4($t3)        # carrega o segundo valor(9.0) de constFC em $f3
+    lwc1    $f4, 8($t3)        # carrega o terceiro valor(32.0) de constFC em $f4
+
+    div.s   $f1, $f3, $f2      # divide $f3 por $f2 e guarda o resultado em $f1
+    mul.s   $f1, $f1, $f0      # multiplica $f1 por $f0 e guarda o resultado em $f1
+    add.s   $f0, $f1, $f4      # soma $f1 com $f4 e guarda o resultado em $f0
+
+    j end
+
+end:
+
+    li      $v0, 2             # printar um float
+    mov.s   $f12, $f0          # guarda o valor de $f0 em $f12
+    syscall
+
+    li      $v0, 10            # encerra o programa
+    syscall
