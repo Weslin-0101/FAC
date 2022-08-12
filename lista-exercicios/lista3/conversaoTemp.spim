@@ -13,10 +13,16 @@ main:
     syscall
     move $t0, $v0           # guarda o caracter lido em $t0
 
+    li  $v0, 12
+    syscall
+
     li  $v0, 12             # ler um caracter
     syscall
     move $t1, $v0           # guarda o caracter lido em $t1
 
+    li  $v0, 12
+    syscall
+    
     li  $v0, 6              # ler um float
     syscall
 
@@ -30,7 +36,11 @@ tempKelvin:
     lb  $s0, celsius        # carrega o caracter celsius em $s0
     beq $t1, $s0, convertKtoC     # se $t1 for igual a $s0, então vai para o celsius
 
-convert
+convertKtoF:
+    lwc1    $f2, constCK    # carrega o valor de 273.15 em $f2
+    sub.s   $f0, $f0, $f2  # subtrai $f0 pelo valor de 273.15
+
+    j convertCToF
 
 convertKtoC:
     lwc1 $f2, constCK
